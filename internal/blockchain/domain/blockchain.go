@@ -4,7 +4,7 @@ type Blockchain struct {
 	Blocks []*Block
 }
 
-// NewBlockchain initializes a blockchain with a genesis block
+// NewBlockchain initializes blockchain with genesis block
 func NewBlockchain() *Blockchain {
 	genesis := NewGenesisBlock()
 	return &Blockchain{
@@ -12,7 +12,7 @@ func NewBlockchain() *Blockchain {
 	}
 }
 
-// AddBlock appends a new block to the chain
+// AddBlock appends a mined block
 func (bc *Blockchain) AddBlock(data string) {
 	prevBlock := bc.Blocks[len(bc.Blocks)-1]
 	newBlock := NewBlock(data, prevBlock.Hash)

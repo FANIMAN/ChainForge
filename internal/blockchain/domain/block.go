@@ -8,6 +8,7 @@ import (
 	"time"
 )
 
+// Block represents a single block in the blockchain
 type Block struct {
 	Timestamp     int64
 	Data          []byte
@@ -16,7 +17,7 @@ type Block struct {
 	Nonce         int64
 }
 
-// NewBlock creates a new block and calculates its hash
+// NewBlock creates a new block and mines it
 func NewBlock(data string, prevBlockHash []byte) *Block {
 	block := &Block{
 		Timestamp:     time.Now().Unix(),
@@ -25,11 +26,16 @@ func NewBlock(data string, prevBlockHash []byte) *Block {
 		Nonce:         0,
 	}
 
-	block.Hash = block.calculateHash()
+	// Mine the block
+	pow := NewProof(block)
+	hash, nonce := pow.Run()
+	block.Hash = hash
+	block.Nonce = nonce
+
 	return block
 }
 
-// calculateHash generates the SHA-256 hash of the block
+// calculateHash generates SHA-256 hash (used internally, optional)
 func (b *Block) calculateHash() []byte {
 	headers := bytes.Join(
 		[][]byte{
@@ -45,7 +51,7 @@ func (b *Block) calculateHash() []byte {
 	return hash[:]
 }
 
-// HashHex returns the block hash as a hex string (useful for logs & APIs)
+// HashHex returns block hash as hex string for logging/API
 func (b *Block) HashHex() string {
 	return hex.EncodeToString(b.Hash)
 }
