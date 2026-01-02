@@ -12,14 +12,15 @@ func NewBlockchain() *Blockchain {
 	}
 }
 
-// AddBlock appends a mined block
-func (bc *Blockchain) AddBlock(data string) {
+// AddBlock appends a mined block with transactions
+func (bc *Blockchain) AddBlock(transactions []*Transaction) {
 	prevBlock := bc.Blocks[len(bc.Blocks)-1]
-	newBlock := NewBlock(data, prevBlock.Hash)
+	newBlock := NewBlock(transactions, prevBlock.Hash)
 	bc.Blocks = append(bc.Blocks, newBlock)
 }
 
 // NewGenesisBlock creates the first block in the chain
 func NewGenesisBlock() *Block {
-	return NewBlock("Genesis Block", []byte{})
+	genesisTx := NewTransaction("network", "genesis", 0) // dummy genesis transaction
+	return NewBlock([]*Transaction{genesisTx}, []byte{})
 }

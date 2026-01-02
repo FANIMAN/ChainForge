@@ -10,21 +10,33 @@ import (
 func main() {
 	start := time.Now()
 
-	// Initialize blockchain with genesis block
+	// Create wallets
+	w1 := domain.NewWallet()
+	w2 := domain.NewWallet()
+
+	fmt.Println("Wallet 1:", w1.Address())
+	fmt.Println("Wallet 2:", w2.Address())
+
+	// Initialize blockchain
 	bc := domain.NewBlockchain()
 
-	// Add blocks
-	bc.AddBlock("First block after genesis")
-	bc.AddBlock("Second block after genesis")
+	// Create transactions
+	tx1 := domain.NewTransaction(w1.Address(), w2.Address(), 10)
+	tx2 := domain.NewTransaction(w2.Address(), w1.Address(), 5)
 
-	// Print blocks
+	// Add a block with transactions
+	bc.AddBlock([]*domain.Transaction{tx1, tx2})
+
+	// Print blockchain
 	for i, block := range bc.Blocks {
-		fmt.Printf("Block %d\n", i)
-		fmt.Printf("  Data: %s\n", block.Data)
+		fmt.Printf("\nBlock %d\n", i)
 		fmt.Printf("  Hash: %s\n", block.HashHex())
 		fmt.Printf("  Nonce: %d\n", block.Nonce)
-		fmt.Printf("  Prev: %x\n\n", block.PrevBlockHash)
+		fmt.Printf("  Transactions:\n")
+		for _, tx := range block.Transactions {
+			fmt.Printf("    %s\n", tx.String())
+		}
 	}
 
-	fmt.Printf("Mining took: %s\n", time.Since(start))
+	fmt.Printf("\nMining + transactions took: %s\n", time.Since(start))
 }
