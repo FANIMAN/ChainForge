@@ -34,15 +34,20 @@ func main() {
 	bc := domain.NewBlockchain(store)
 
 	// ----------------------------
-	// Create transactions
+	// Create transactions and add to mempool
 	// ----------------------------
 	tx1 := domain.NewTransaction(w1.Address(), w2.Address(), 10)
 	_ = tx1.Sign(w1.PrivateKey)
+	bc.AddToMempool(tx1)
 
 	tx2 := domain.NewTransaction(w2.Address(), w1.Address(), 5)
 	_ = tx2.Sign(w2.PrivateKey)
+	bc.AddToMempool(tx2)
 
-	bc.AddBlock([]*domain.Transaction{tx1, tx2}, wallets)
+	// ----------------------------
+	// Mine pending transactions with reward
+	// ----------------------------
+	bc.MinePendingTxs(w1.Address(), wallets, 50) // Wallet1 gets 50 coin reward
 
 	// ----------------------------
 	// Print blockchain
@@ -58,7 +63,7 @@ func main() {
 	}
 
 	// ----------------------------
-	// Print balances
+	// Print wallet balances
 	// ----------------------------
 	fmt.Printf("\nWallet balances:\n")
 	fmt.Printf("  Wallet 1: %d\n", bc.GetBalance(w1.Address()))
