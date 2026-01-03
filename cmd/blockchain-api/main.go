@@ -2,54 +2,78 @@ package main
 
 import (
 	"log"
+	"os"
 
-	"github.com/FANIMAN/chainforge/internal/blockchain/domain"
-	"github.com/FANIMAN/chainforge/internal/blockchain/handler"
-	"github.com/FANIMAN/chainforge/internal/blockchain/storage"
+	authHandler "github.com/FANIMAN/chainforge/internal/auth/handler"
+	authRepo "github.com/FANIMAN/chainforge/internal/auth/repository"
+	authService "github.com/FANIMAN/chainforge/internal/auth/service"
+
+	blockDomain "github.com/FANIMAN/chainforge/internal/blockchain/domain"
+	blockHandler "github.com/FANIMAN/chainforge/internal/blockchain/handler"
+	blockStorage "github.com/FANIMAN/chainforge/internal/blockchain/storage"
+
+	"github.com/FANIMAN/chainforge/pkg/middleware"
 	"github.com/gin-gonic/gin"
 )
 
 func main() {
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8080"
+	}
+
 	// ----------------------------
-	// Initialize persistent storage
+	// Initialize blockchain storage
 	// ----------------------------
-	store := storage.NewBadgerStore()
+	store := blockStorage.NewBadgerStore()
 	defer store.Close()
 
 	// ----------------------------
 	// Initialize blockchain
 	// ----------------------------
-	bc := domain.NewBlockchain(store)
+	bc := blockDomain.NewBlockchain(store)
+
+	// ----------------------------
+	// Initialize Auth service
+	// ----------------------------
+	userRepo := authRepo.NewUserRepo()
+	authSvc := authService.NewAuthService(userRepo)
+	authH := authHandler.NewAuthHandler(authSvc)
 
 	// ----------------------------
 	// Initialize Gin & Handlers
 	// ----------------------------
 	r := gin.Default()
-	blockHandler := handler.NewBlockchainHandler(bc)
-	walletHandler := handler.NewWalletHandler()
+	bcHandler := blockHandler.NewBlockchainHandler(bc)
+	walletHandler := blockHandler.NewWalletHandler()
 
 	// ----------------------------
-	// Wallet routes
+	// Public routes
 	// ----------------------------
+	r.POST("/auth/register", authH.Register)
+	r.POST("/auth/login", authH.Login)
+
 	r.POST("/wallet/create", walletHandler.CreateWallet)
 	r.GET("/wallet/balance/:address", func(c *gin.Context) {
 		walletHandler.GetBalance(c, bc)
 	})
 
+	r.GET("/blockchain", bcHandler.GetBlockchain)
+	r.GET("/mempool", bcHandler.GetMempool)
+
 	// ----------------------------
-	// Blockchain routes
+	// Protected routes (JWT)
 	// ----------------------------
-	r.GET("/blockchain", blockHandler.GetBlockchain)
-	r.GET("/mempool", blockHandler.GetMempool)
-	r.POST("/transaction/send", func(c *gin.Context) {
-		blockHandler.SendTransaction(c, walletHandler.Wallets)
+	authGroup := r.Group("/", middleware.AuthMiddleware())
+	authGroup.POST("/transaction/send", func(c *gin.Context) {
+		bcHandler.SendTransaction(c, walletHandler.Wallets)
 	})
-	r.POST("/blockchain/mine", func(c *gin.Context) {
-		blockHandler.MineBlock(c, walletHandler.Wallets)
+	authGroup.POST("/blockchain/mine", func(c *gin.Context) {
+		bcHandler.MineBlock(c, walletHandler.Wallets)
 	})
 
-	log.Println("🚀 Blockchain API running on :8080")
-	if err := r.Run(":8080"); err != nil {
+	log.Println("🚀 Blockchain API running on :" + port)
+	if err := r.Run(":" + port); err != nil {
 		log.Fatal(err)
 	}
 }
