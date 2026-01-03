@@ -15,3 +15,25 @@ bin/
 
 # Vendor
 vendor/
+
+
+# Blockchain / database runtime data
+data/
+data/**
+
+# BadgerDB specific
+*.vlog
+*.mem
+LOCK
+MANIFEST
+KEYREGISTRY
+DISCARD
+
+# Go build artifacts
+bin/
+dist/
+
+# OS / editor
+.DS_Store
+.idea/
+.vscode/
