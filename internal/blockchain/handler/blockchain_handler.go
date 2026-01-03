@@ -29,6 +29,7 @@ func (h *BlockchainHandler) SendTransaction(c *gin.Context, wallets map[string]*
 		To     string `json:"to"`
 		Amount int    `json:"amount"`
 	}
+
 	if err := c.ShouldBindJSON(&req); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
@@ -46,6 +47,10 @@ func (h *BlockchainHandler) SendTransaction(c *gin.Context, wallets map[string]*
 		return
 	}
 
-	h.BC.AddBlockWithVerification([]*domain.Transaction{tx}, wallets)
-	c.JSON(http.StatusOK, gin.H{"message": "transaction added"})
+	// ✅ Single source of truth
+	h.BC.AddBlock([]*domain.Transaction{tx}, wallets)
+
+	c.JSON(http.StatusOK, gin.H{
+		"message": "transaction mined and added to blockchain",
+	})
 }
