@@ -3,11 +3,16 @@ package main
 import (
 	"github.com/FANIMAN/chainforge/internal/blockchain/domain"
 	"github.com/FANIMAN/chainforge/internal/blockchain/handler"
+	"github.com/FANIMAN/chainforge/internal/blockchain/storage"
 	"github.com/gin-gonic/gin"
 )
 
 func main() {
-	bc := domain.NewBlockchain()
+	store := storage.NewBadgerStore()
+	defer store.Close()
+
+	bc := domain.NewBlockchain(store)
+
 	walletHandler := handler.NewWalletHandler()
 	blockchainHandler := handler.NewBlockchainHandler(bc)
 
@@ -27,4 +32,3 @@ func main() {
 
 	r.Run(":8080")
 }
-	
