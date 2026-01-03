@@ -2,6 +2,7 @@ package handler
 
 import (
 	"net/http"
+	"strconv"
 
 	"github.com/FANIMAN/chainforge/internal/blockchain/domain"
 	"github.com/gin-gonic/gin"
@@ -20,6 +21,11 @@ func NewBlockchainHandler(bc *domain.Blockchain) *BlockchainHandler {
 // GetBlockchain handles GET /blockchain
 func (h *BlockchainHandler) GetBlockchain(c *gin.Context) {
 	c.JSON(http.StatusOK, h.BC.Blocks)
+}
+
+// GetMempool handles GET /mempool
+func (h *BlockchainHandler) GetMempool(c *gin.Context) {
+	c.JSON(http.StatusOK, h.BC.GetPendingTxs())
 }
 
 // SendTransaction handles POST /transaction/send
@@ -47,10 +53,36 @@ func (h *BlockchainHandler) SendTransaction(c *gin.Context, wallets map[string]*
 		return
 	}
 
-	// ✅ Single source of truth
-	h.BC.AddBlock([]*domain.Transaction{tx}, wallets)
+	// Add to mempool
+	h.BC.AddToMempool(tx)
 
 	c.JSON(http.StatusOK, gin.H{
-		"message": "transaction mined and added to blockchain",
+		"message": "transaction added to mempool",
+	})
+}
+
+// MineBlock handles POST /blockchain/mine
+func (h *BlockchainHandler) MineBlock(c *gin.Context, wallets map[string]*domain.Wallet) {
+	miner := c.Query("miner")
+	rewardStr := c.Query("reward")
+
+	if miner == "" || wallets[miner] == nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid miner address"})
+		return
+	}
+
+	reward := 50 // default reward
+	if rewardStr != "" {
+		if r, err := strconv.Atoi(rewardStr); err == nil {
+			reward = r
+		}
+	}
+
+	h.BC.MinePendingTxs(miner, wallets, reward)
+
+	c.JSON(http.StatusOK, gin.H{
+		"message": "pending transactions mined",
+		"miner":   miner,
+		"reward":  reward,
 	})
 }

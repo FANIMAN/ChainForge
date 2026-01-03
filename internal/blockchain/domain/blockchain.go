@@ -3,6 +3,7 @@ package domain
 type Blockchain struct {
 	Blocks  []*Block
 	Storage Storage
+	Mempool []*Transaction
 }
 
 type Storage interface {
@@ -75,4 +76,37 @@ func (bc *Blockchain) GetBalance(address string) int {
 func NewGenesisBlock() *Block {
 	genesisTx := NewTransaction("network", "genesis", 0)
 	return NewBlock([]*Transaction{genesisTx}, []byte{})
+}
+
+
+// Add transaction to mempool
+func (bc *Blockchain) AddToMempool(tx *Transaction) {
+    bc.Mempool = append(bc.Mempool, tx)
+}
+
+// Get pending transactions
+func (bc *Blockchain) GetPendingTxs() []*Transaction {
+    return bc.Mempool
+}
+
+// Mine pending transactions (with coinbase reward)
+func (bc *Blockchain) MinePendingTxs(minerAddress string, wallets map[string]*Wallet, reward int) {
+    if len(bc.Mempool) == 0 {
+        return
+    }
+
+    // Coinbase tx
+    coinbase := NewTransaction("network", minerAddress, reward)
+    
+    // Combine coinbase + pending txs
+    txs := append([]*Transaction{coinbase}, bc.Mempool...)
+
+    prevBlock := bc.Blocks[len(bc.Blocks)-1]
+    newBlock := NewBlock(txs, prevBlock.Hash)
+
+    bc.Blocks = append(bc.Blocks, newBlock)
+    bc.Storage.SaveBlock(newBlock)
+
+    // Clear mempool
+    bc.Mempool = []*Transaction{}
 }
