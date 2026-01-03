@@ -7,6 +7,7 @@ toolchain go1.24.11
 require (
 	github.com/dgraph-io/badger/v4 v4.9.0
 	github.com/gin-gonic/gin v1.11.0
+	github.com/golang-jwt/jwt/v5 v5.3.0
 )
 
 require (
