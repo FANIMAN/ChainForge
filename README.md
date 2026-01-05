@@ -1,4 +1,5 @@
-# ChainForge ⚙️⛓️
+````markdown
+# ChainForge 
 
 **ChainForge** is a production-grade Web3 backend platform built with **Golang microservices**, focusing on **blockchain infrastructure, on-chain data indexing, and secure distributed systems**.
 
@@ -35,52 +36,52 @@ ChainForge aims to showcase:
 
 ## Repository Structure
 
+```text
 chainforge/
-├── api/ # gRPC & OpenAPI specs
-├── cmd/ # Service entry points
-├── internal/ # Core business logic
-├── pkg/ # Shared libraries
-├── scripts/ # Utility scripts
-├── deployments/ # Docker & K8s configs
-├── docs/ # Architecture & design docs
+├── api/           # gRPC & OpenAPI specs
+├── cmd/           # Service entry points
+├── internal/      # Core business logic
+├── pkg/           # Shared libraries
+├── scripts/       # Utility scripts
+├── deployments/   # Docker & Kubernetes configs
+├── docs/          # Architecture & design docs
 └── README.md
-
-
-
-
+````
 
 ---
 
 ## Roadmap
 
 ### Phase 1 – Blockchain Core
-- Block & Blockchain structures
-- Proof-of-Work consensus
-- Persistent storage
+
+* Block & Blockchain structures
+* Proof-of-Work consensus
+* Persistent storage
 
 ### Phase 2 – Wallets & Transactions
-- Key generation
-- Transaction signing
-- UTXO model
+
+* Key generation
+* Transaction signing
+* UTXO model
 
 ### Phase 3 – APIs & Services
-- Blockchain service API
-- Wallet service
-- Auth service (JWT, RBAC)
+
+* Blockchain service API
+* Wallet service
+* Auth service (JWT, RBAC)
 
 ### Phase 4 – Indexing & Pricing
-- Ethereum & Solana indexers
-- Token price tracking
-- Price alerts & notifications
+
+* Ethereum & Solana indexers
+* Token price tracking
+* Price alerts & notifications
 
 ---
 
 ## Status
 
-**Active development**  
+**Active development**
 Each day introduces a new production-quality feature.
 
----
-
-
+````
 
