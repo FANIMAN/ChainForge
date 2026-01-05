@@ -1,5 +1,5 @@
 ````markdown
-# ChainForge 
+# ChainForge
 
 **ChainForge** is a production-grade Web3 backend platform built with **Golang microservices**, focusing on **blockchain infrastructure, on-chain data indexing, and secure distributed systems**.
 
@@ -23,13 +23,13 @@ ChainForge aims to showcase:
 
 ## Architecture Overview
 
-- **Language:** Golang
-- **Architecture:** Microservices + Clean Architecture
-- **APIs:** REST (external), gRPC (internal)
-- **Blockchain:** Custom chain + Ethereum + Solana
-- **Messaging:** Kafka (event-driven)
-- **Storage:** PostgreSQL, Redis, BadgerDB
-- **Security:** JWT, RBAC, cryptographic signatures
+- **Language:** Golang  
+- **Architecture:** Microservices + Clean Architecture  
+- **APIs:** REST (external), gRPC (internal)  
+- **Blockchain:** Custom chain + Ethereum + Solana  
+- **Messaging:** Kafka (event-driven)  
+- **Storage:** PostgreSQL, Redis, BadgerDB  
+- **Security:** JWT, RBAC, cryptographic signatures  
 - **DevOps:** Docker, Docker Compose, Kubernetes (planned)
 
 ---
@@ -83,5 +83,5 @@ chainforge/
 **Active development**
 Each day introduces a new production-quality feature.
 
-````
-
+```
+```
