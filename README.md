@@ -1,4 +1,3 @@
-````markdown
 # ChainForge 
 
 **ChainForge** is a production-grade Web3 backend platform built with **Golang microservices**, focusing on **blockchain infrastructure, on-chain data indexing, and secure distributed systems**.
@@ -36,7 +35,7 @@ ChainForge aims to showcase:
 
 ## Repository Structure
 
-```text
+```
 chainforge/
 ├── api/           # gRPC & OpenAPI specs
 ├── cmd/           # Service entry points
@@ -83,5 +82,4 @@ chainforge/
 **Active development**
 Each day introduces a new production-quality feature.
 
-````
 
