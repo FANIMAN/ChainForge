@@ -1,5 +1,7 @@
 package domain
 
+import "errors"
+
 type Blockchain struct {
 	Blocks  []*Block
 	Storage Storage
@@ -80,9 +82,46 @@ func NewGenesisBlock() *Block {
 
 
 // Add transaction to mempool
-func (bc *Blockchain) AddToMempool(tx *Transaction) {
-    bc.Mempool = append(bc.Mempool, tx)
+// func (bc *Blockchain) AddToMempool(tx *Transaction) {
+//     bc.Mempool = append(bc.Mempool, tx)
+// }
+
+
+// AddToMempool adds a transaction to mempool after full validation
+func (bc *Blockchain) AddToMempool(tx *Transaction, wallets map[string]*Wallet) error {
+	if tx == nil {
+		return errors.New("transaction is nil")
+	}
+
+	// Validate transaction structure
+	if !tx.IsValid() {
+		return errors.New("invalid transaction structure")
+	}
+
+	// Check sender exists
+	senderWallet, ok := wallets[tx.From]
+	if !ok {
+		return errors.New("sender wallet not found")
+	}
+
+	// Check balance
+	if bc.GetBalance(tx.From) < tx.Amount {
+		return errors.New("insufficient balance")
+	}
+
+	// Verify signature
+	if !tx.Verify(senderWallet.PublicKey) {
+		return errors.New("invalid transaction signature")
+	}
+
+	// Passed all checks, add to mempool
+	bc.Mempool = append(bc.Mempool, tx)
+	return nil
 }
+
+
+
+
 
 // Get pending transactions
 func (bc *Blockchain) GetPendingTxs() []*Transaction {

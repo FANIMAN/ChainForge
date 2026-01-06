@@ -77,3 +77,17 @@ func (r randReader) Read(b []byte) (int, error) {
 func (tx *Transaction) String() string {
 	return fmt.Sprintf("TX %s: %s -> %s | %d coins", tx.ID, tx.From, tx.To, tx.Amount)
 }
+
+
+func (tx *Transaction) IsValid() bool {
+	if tx.From == "" || tx.To == "" {
+		return false
+	}
+	if tx.Amount <= 0 {
+		return false
+	}
+	if tx.Signature == nil {
+		return false
+	}
+	return true
+}
