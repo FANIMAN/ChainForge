@@ -33,16 +33,36 @@ func main() {
 
 	bc := domain.NewBlockchain(store)
 
+	// ============================
+	// TEST MODE (Faucet for Wallet1)
+	// ============================
+	fmt.Println("\n💧 Test Faucet: Funding Wallet1 with 100 coins for testing")
+	faucetTx := domain.NewTransaction("network", w1.Address(), 100)
+	bc.Mempool = []*domain.Transaction{faucetTx}
+	bc.MinePendingTxs(w1.Address(), wallets, 0) // reward=0 for faucet
+
+	// ============================
+	// PRODUCTION MODE (no faucet)
+	// ============================
+	/*
+	   // In production, wallets must already have balance from real coins
+	   // No faucet should be used. Transactions will fail if sender has insufficient balance.
+	*/
+
 	// ----------------------------
 	// Create transactions and add to mempool
 	// ----------------------------
 	tx1 := domain.NewTransaction(w1.Address(), w2.Address(), 10)
 	_ = tx1.Sign(w1.PrivateKey)
-	bc.AddToMempool(tx1)
+	if err := bc.AddToMempool(tx1, wallets); err != nil {
+		fmt.Println("Failed to add tx1:", err)
+	}
 
 	tx2 := domain.NewTransaction(w2.Address(), w1.Address(), 5)
 	_ = tx2.Sign(w2.PrivateKey)
-	bc.AddToMempool(tx2)
+	if err := bc.AddToMempool(tx2, wallets); err != nil {
+		fmt.Println("Failed to add tx2:", err)
+	}
 
 	// ----------------------------
 	// Mine pending transactions with reward

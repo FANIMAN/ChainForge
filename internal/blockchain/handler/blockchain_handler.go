@@ -53,8 +53,14 @@ func (h *BlockchainHandler) SendTransaction(c *gin.Context, wallets map[string]*
 		return
 	}
 
-	// Add to mempool
-	h.BC.AddToMempool(tx)
+	// -----------------------------
+	// Add to mempool with validation
+	// -----------------------------
+	if err := h.BC.AddToMempool(tx, wallets); err != nil {
+		// Return specific error messages from AddToMempool
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
 
 	c.JSON(http.StatusOK, gin.H{
 		"message": "transaction added to mempool",
