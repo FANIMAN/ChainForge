@@ -1,9 +1,19 @@
-````markdown
 # ChainForge
 
-**ChainForge** is a production-grade Web3 backend platform built with **Golang microservices**, focusing on **blockchain infrastructure, on-chain data indexing, and secure distributed systems**.
+> Production-grade Web3 backend platform built with Golang microservices for blockchain infrastructure, on-chain indexing, and distributed systems.
 
-This project is developed incrementally as a public repository to demonstrate real-world backend, blockchain, and Web3 engineering practices.
+## Overview
+
+ChainForge is an educational and production-inspired project that demonstrates modern backend and blockchain engineering practices using Go.
+
+The platform is designed around a microservice architecture and focuses on:
+
+* Custom blockchain implementation
+* Wallets and transaction processing
+* Ethereum & Solana data indexing
+* Token price tracking and alerts
+* Secure authentication and authorization
+* Event-driven distributed systems
 
 ---
 
@@ -11,76 +21,99 @@ This project is developed incrementally as a public repository to demonstrate re
 
 ChainForge aims to showcase:
 
-- Custom blockchain implementation (PoW → PoS)
-- Wallets, transactions, and cryptographic signing
-- Ethereum & Solana on-chain data indexing
-- Token price tracking & alerting
-- Secure, scalable Golang microservices
-- Event-driven architecture with message brokers
-- Dockerized & CI-ready services
+* Blockchain fundamentals (PoW → PoS evolution)
+* Cryptographic signing and wallet management
+* High-performance indexing pipelines
+* Real-time token pricing services
+* Scalable Golang microservices
+* Event-driven architectures using Kafka
+* Production-ready deployment workflows
 
 ---
 
-## Architecture Overview
+## Tech Stack
 
-- **Language:** Golang  
-- **Architecture:** Microservices + Clean Architecture  
-- **APIs:** REST (external), gRPC (internal)  
-- **Blockchain:** Custom chain + Ethereum + Solana  
-- **Messaging:** Kafka (event-driven)  
-- **Storage:** PostgreSQL, Redis, BadgerDB  
-- **Security:** JWT, RBAC, cryptographic signatures  
-- **DevOps:** Docker, Docker Compose, Kubernetes (planned)
+| Category         | Technology                         |
+| ---------------- | ---------------------------------- |
+| Language         | Go (Golang)                        |
+| Architecture     | Microservices + Clean Architecture |
+| API Layer        | REST + gRPC                        |
+| Blockchain       | Custom Chain, Ethereum, Solana     |
+| Messaging        | Kafka                              |
+| Database         | PostgreSQL                         |
+| Cache            | Redis                              |
+| Embedded Storage | BadgerDB                           |
+| Security         | JWT, RBAC                          |
+| DevOps           | Docker, Docker Compose             |
+| Future           | Kubernetes                         |
 
 ---
 
-## Repository Structure
+## Project Structure
 
 ```text
 chainforge/
-├── api/           # gRPC & OpenAPI specs
+├── api/           # gRPC & OpenAPI specifications
 ├── cmd/           # Service entry points
-├── internal/      # Core business logic
-├── pkg/           # Shared libraries
-├── scripts/       # Utility scripts
+├── internal/      # Business logic
+├── pkg/           # Shared packages
+├── scripts/       # Development utilities
 ├── deployments/   # Docker & Kubernetes configs
-├── docs/          # Architecture & design docs
+├── docs/          # Architecture documentation
 └── README.md
-````
+```
 
 ---
 
 ## Roadmap
 
-### Phase 1 – Blockchain Core
+### Phase 1 — Blockchain Core
 
-* Block & Blockchain structures
-* Proof-of-Work consensus
-* Persistent storage
+* [ ] Block structure
+* [ ] Blockchain implementation
+* [ ] Proof-of-Work consensus
+* [ ] Persistent storage
 
-### Phase 2 – Wallets & Transactions
+### Phase 2 — Wallets & Transactions
 
-* Key generation
-* Transaction signing
-* UTXO model
+* [ ] Key generation
+* [ ] Transaction signing
+* [ ] UTXO model
 
-### Phase 3 – APIs & Services
+### Phase 3 — APIs & Services
 
-* Blockchain service API
-* Wallet service
-* Auth service (JWT, RBAC)
+* [ ] Blockchain API
+* [ ] Wallet Service
+* [ ] Authentication Service
+* [ ] JWT & RBAC
 
-### Phase 4 – Indexing & Pricing
+### Phase 4 — Indexing & Pricing
 
-* Ethereum & Solana indexers
-* Token price tracking
-* Price alerts & notifications
+* [ ] Ethereum indexer
+* [ ] Solana indexer
+* [ ] Token price service
+* [ ] Alerts & notifications
 
 ---
 
-## Status
+## Current Status
 
-**Active development**
-Each day introduces a new production-quality feature.
+🚧 Active Development
 
+ChainForge is being developed incrementally in public, with each feature documented and committed as a real-world engineering exercise.
 
+---
+
+## Goals
+
+* Learn advanced Golang backend development
+* Build production-ready blockchain systems
+* Practice distributed systems design
+* Demonstrate software engineering best practices
+* Create a portfolio-quality Web3 project
+
+---
+
+## License
+
+MIT License
